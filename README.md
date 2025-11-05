@@ -53,7 +53,7 @@ Generate Confusion Matrix, Classification Report, and test on new sample images.
 
 ### Developed By: A.LAHARI
 ### Register Number: 212223230111
-```python
+```
 # Load Pretrained Model and Modify for Transfer Learning
 from torchvision.models import VGG19_Weights
 model = models.vgg19(weights=models.VGG19_Weights.DEFAULT)
@@ -71,7 +71,7 @@ optimizer = optim.Adam(model.parameters(), lr=0.001)
 
 
 # Train the model
-def train_model(model, train_loader,test_loader,num_epochs=10):
+def train_model(model, train_loader, test_loader, num_epochs=50):
     train_losses = []
     val_losses = []
     model.train()
@@ -79,22 +79,23 @@ def train_model(model, train_loader,test_loader,num_epochs=10):
         running_loss = 0.0
         for images, labels in train_loader:
             images, labels = images.to(device), labels.to(device)
+            labels = labels.float().unsqueeze(1)
             optimizer.zero_grad()
             outputs = model(images)
-            loss = criterion(outputs, labels.unsqueeze(1).float()) # Reshape labels and convert to float
+            loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
             running_loss += loss.item()
         train_losses.append(running_loss / len(train_loader))
 
-        # Compute validation loss
         model.eval()
         val_loss = 0.0
         with torch.no_grad():
             for images, labels in test_loader:
                 images, labels = images.to(device), labels.to(device)
+                labels = labels.float().unsqueeze(1)
                 outputs = model(images)
-                loss = criterion(outputs, labels.unsqueeze(1).float()) # Reshape labels and convert to float
+                loss = criterion(outputs, labels)
                 val_loss += loss.item()
 
         val_losses.append(val_loss / len(test_loader))
@@ -102,9 +103,8 @@ def train_model(model, train_loader,test_loader,num_epochs=10):
 
         print(f'Epoch [{epoch+1}/{num_epochs}], Train Loss: {train_losses[-1]:.4f}, Validation Loss: {val_losses[-1]:.4f}')
 
-    # Plot training and validation loss
-    print("Name: A.LAHARI")
-    print("Register Number: 212223230111")
+    print("Name:A.LAHARI")
+    print("Register Number:212223230111")
     plt.figure(figsize=(8, 6))
     plt.plot(range(1, num_epochs + 1), train_losses, label='Train Loss', marker='o')
     plt.plot(range(1, num_epochs + 1), val_losses, label='Validation Loss', marker='s')
@@ -113,8 +113,6 @@ def train_model(model, train_loader,test_loader,num_epochs=10):
     plt.title('Training and Validation Loss')
     plt.legend()
     plt.show()
-    return model 
-
 
 ```
 
@@ -123,34 +121,26 @@ def train_model(model, train_loader,test_loader,num_epochs=10):
 
 ### Training Loss, Validation Loss Vs Iteration Plot:
 
-
-
-<img width="819" height="653" alt="image" src="https://github.com/user-attachments/assets/a1fd8424-b574-4bf7-bba5-a055c6a7e70f" />
+<img width="791" height="667" alt="image" src="https://github.com/user-attachments/assets/659fcd3f-3d19-45a6-9891-0c44c9411c8e" />
 
 
 ### Confusion Matrix:
 
+<img width="623" height="592" alt="image" src="https://github.com/user-attachments/assets/2f8cbc88-a877-45e4-87de-eea429149694" />
 
-
-<img width="761" height="682" alt="image" src="https://github.com/user-attachments/assets/7fd36ecc-e787-4d36-bc43-23585b06e8da" />
 
 ### Classification Report
 
-
-
-<img width="511" height="249" alt="image" src="https://github.com/user-attachments/assets/5583c91d-1287-4159-b640-3f8ab36181ec" />
+<img width="514" height="256" alt="image" src="https://github.com/user-attachments/assets/f88dd7f2-01de-407e-bc15-c73fe3c3d5a6" />
 
 
 ### New Sample Prediction
 
 
-
-<img width="382" height="450" alt="image" src="https://github.com/user-attachments/assets/51d5c582-0230-449c-b85d-86478e93b240" />
-
+<img width="392" height="451" alt="image" src="https://github.com/user-attachments/assets/add1a2b4-acac-4345-b095-912b0608c8f5" />
 
 
-<img width="388" height="452" alt="image" src="https://github.com/user-attachments/assets/27a6a059-e066-43e1-b335-95d86db94df0" />
-
+<img width="391" height="456" alt="image" src="https://github.com/user-attachments/assets/be4749d2-871e-4e96-9454-dab738c4bbac" />
 
 
 ## RESULT:
